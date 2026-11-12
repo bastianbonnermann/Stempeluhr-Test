@@ -69,7 +69,26 @@ $('saveSettings').onclick=()=>{state.settings.annualLeave=Math.max(0,Number($('s
 function csvCell(v){return '"'+String(v??'').replace(/"/g,'""')+'"';}
 $('csvBtn').onclick=()=>{const year=$('yearFilter').value,rows=allDays().filter(d=>year==='all'||d.date.startsWith(year));const lines=[['Datum','Kommen','Gehen','Intervalle','Kennzeichen','IST_Minuten','SOLL_Minuten','Differenz_Minuten','Bemerkung']];for(const d of rows){const c=dayCalc(d),ivs=intervalsOf(d),iv=ivs.map(x=>`${x.come}-${x.go}`).join(' | ');lines.push([fmtDate(d.date),ivs[0]?.come||'',ivs[ivs.length-1]?.go||'',iv,d.code,c.ist??'',c.soll,c.diff??'',d.note]);}const csv='\ufeff'+lines.map(r=>r.map(csvCell).join(';')).join('\r\n');download(csv,`Stempeluhr_${year==='all'?'Alle':year}.csv`,'text/csv;charset=utf-8');message('dataMessage','CSV-Datei wurde erstellt.');};
 function download(content,name,type){const blob=new Blob([content],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);}
-$('printBtn').onclick=()=>{setTab('auswertung');window.print();};
+function buildMonthlyPrintReport(){
+ const selectedYear=$('yearFilter').value;
+ const rows=allDays().filter(d=>selectedYear==='all'||d.date.startsWith(selectedYear));
+ const groups=new Map();
+ for(const d of rows){const key=d.date.slice(0,7);if(!groups.has(key))groups.set(key,[]);groups.get(key).push(d);}
+ const monthNames=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+ const report=$('printReport');
+ if(!groups.size){report.innerHTML='<section class="print-month"><h2>Keine Buchungen vorhanden</h2></section>';return;}
+ report.innerHTML=[...groups.entries()].sort((a,b)=>a[0].localeCompare(b[0])).map(([key,items])=>{
+  const [y,m]=key.split('-').map(Number);let total=0,complete=0,incomplete=0;
+  const body=items.sort((a,b)=>a.date.localeCompare(b.date)).map(d=>{
+   const c=dayCalc(d),ivs=intervalsOf(d),comes=ivs.map(x=>x.come).filter(Boolean).join(' / ')||'—',goes=ivs.map(x=>x.go).filter(Boolean).join(' / ')||'—';
+   if(c.diff===null)incomplete++;else{total+=c.diff;complete++;}
+   return `<tr><td>${fmtDate(d.date)}</td><td>${escapeHtml(dayLabel(d.code))}</td><td>${escapeHtml(comes)}</td><td>${escapeHtml(goes)}</td><td>${c.ist===null?'offen':minsText(c.ist)+' h'}</td><td>${minsText(c.soll)} h</td><td>${c.diff===null?'—':minsText(c.diff)+' h'}</td><td>${escapeHtml(d.note||'')}</td></tr>`;
+  }).join('');
+  return `<section class="print-month"><h2>Arbeitszeitübersicht – ${monthNames[m-1]} ${y}</h2><table><thead><tr><th>Datum</th><th>Art</th><th>Kommen</th><th>Gehen</th><th>IST</th><th>SOLL</th><th>Differenz</th><th>Bemerkung</th></tr></thead><tbody>${body}</tbody><tfoot><tr><th colspan="6">Monatsdifferenz${incomplete?` (ohne ${incomplete} unvollständige Buchung${incomplete===1?'':'en'})`:''}</th><th>${minsText(total)} h</th><th></th></tr></tfoot></table><p class="print-footnote">Ausgewertete Buchungstage: ${items.length} · Vollständig berechnet: ${complete}</p></section>`;
+ }).join('');
+}
+$('printBtn').onclick=()=>{setTab('auswertung');buildMonthlyPrintReport();window.print();};
+window.addEventListener('afterprint',()=>{$('printReport').innerHTML='';});
 $('backupBtn').onclick=()=>{const payload={app:'Stempeluhr',version:4,exportedAt:new Date().toISOString(),data:state};download(JSON.stringify(payload,null,2),`Stempeluhr_Sicherung_${dateStr(new Date())}.json`,'application/json');message('dataMessage','Sicherung wurde erstellt.');};
 $('restoreBtn').onclick=async()=>{const file=$('restoreFile').files[0];if(!file){message('dataMessage','Bitte zuerst eine JSON-Sicherungsdatei auswählen.',true);return;}try{const obj=JSON.parse(await file.text()),incoming=obj.data||obj;if(!Array.isArray(incoming.days)||!Array.isArray(incoming.adjustments))throw Error('Ungültiges Sicherungsformat');const merge=(a,b)=>[...a,...b.filter(x=>!a.some(y=>y.id===x.id))];state.days=merge(state.days,incoming.days);state.adjustments=merge(state.adjustments,incoming.adjustments);state.settings={...state.settings,...(incoming.settings||{})};save();render();message('dataMessage','Sicherung wurde zusammengeführt. Vorhandene Buchungen blieben erhalten.');}catch(err){message('dataMessage','Sicherung konnte nicht eingelesen werden: '+err.message,true);}};
 const today=dateStr(new Date());$('workDate').value=today;addIntervalRow();$('absenceFrom').value=today;$('absenceTo').value=today;$('adjustDate').value=today;
