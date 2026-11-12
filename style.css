@@ -5,3 +5,5 @@
 .ledger-summary{margin:0 0 20px}.ledger-summary .stat strong{font-size:25px}
 
 .editor-card{background:#f5f8fc;border:1px solid #d8e2ee;border-radius:10px;padding:16px;margin:0 0 16px}.editor-card[hidden]{display:none}.editor-card .form-card{max-width:620px;padding:0;background:transparent}.editor-actions{display:flex;gap:8px;flex-wrap:wrap}.history-list{margin-top:16px;color:#53677f;font-size:13px;line-height:1.6}.history-entry{padding:8px 0;border-top:1px solid #dce5ef}.table-wrap button{padding:7px 10px;font-size:12px}
+
+.remove-adjustment{white-space:nowrap;color:#9b2c2c!important;border-color:#e4bcbc!important}

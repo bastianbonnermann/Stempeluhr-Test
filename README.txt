@@ -78,3 +78,9 @@ TESTSCHRITT
 4. „Buchung entfernen“ anklicken und bestätigen.
 5. Prüfen, dass 01.01.2027 aus der Tagesbuchungstabelle verschwindet. Die automatische Feiertagsliste unter „Abwesenheit“ bleibt davon unberührt.
 6. Anschließend eine JSON-Datensicherung herunterladen.
+
+
+VERSION 4.1 – KORREKTUR MANUELLER ZEITKONTOANPASSUNGEN
+- Manuelle Anpassungen können im Kontoverlauf einzeln entfernt werden (mit Sicherheitsabfrage).
+- Neue manuelle Anpassungen vor dem eingestellten Zeitkonto-Start werden abgewiesen.
+- Vorhandene Buchungen und Einstellungen bleiben bei einem Update im selben Browser-Speicher erhalten.
