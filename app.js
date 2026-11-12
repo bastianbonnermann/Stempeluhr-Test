@@ -72,19 +72,33 @@ function download(content,name,type){const blob=new Blob([content],{type}),url=U
 function buildMonthlyPrintReport(){
  const selectedYear=$('yearFilter').value;
  const rows=allDays().filter(d=>selectedYear==='all'||d.date.startsWith(selectedYear));
- const groups=new Map();
- for(const d of rows){const key=d.date.slice(0,7);if(!groups.has(key))groups.set(key,[]);groups.get(key).push(d);}
+ const monthKeys=[...new Set(rows.map(d=>d.date.slice(0,7)))].sort();
  const monthNames=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+ const weekdays=['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
  const report=$('printReport');
- if(!groups.size){report.innerHTML='<section class="print-month"><h2>Keine Buchungen vorhanden</h2></section>';return;}
- report.innerHTML=[...groups.entries()].sort((a,b)=>a[0].localeCompare(b[0])).map(([key,items])=>{
-  const [y,m]=key.split('-').map(Number);let total=0,complete=0,incomplete=0;
-  const body=items.sort((a,b)=>a.date.localeCompare(b.date)).map(d=>{
+ if(!monthKeys.length){report.innerHTML='<section class="print-month"><h2>Keine Buchungen vorhanden</h2></section>';return;}
+ const byDate=new Map(rows.map(d=>[d.date,d]));
+ report.innerHTML=monthKeys.map(key=>{
+  const [y,m]=key.split('-').map(Number),lastDay=new Date(y,m,0).getDate();
+  let total=0,complete=0,incomplete=0,booked=0;
+  const body=Array.from({length:lastDay},(_,i)=>{
+   const date=`${y}-${pad(m)}-${pad(i+1)}`,dt=new Date(`${date}T12:00:00`),weekday=weekdays[dt.getDay()];
+   const d=byDate.get(date),holiday=holidayList(y).find(h=>h.date===date),weekend=isWeekend(date);
+   if(!d){
+    let label='Nicht erfasst',ist='—',soll='8:00 h',diff='—',note='';
+    if(holiday){label=`Feiertag · ${holiday.name}`;ist='8:00 h';soll='8:00 h';diff='0:00 h';}
+    else if(weekend){label='Wochenendtag';ist='0:00 h';soll='0:00 h';diff='0:00 h';}
+    return `<tr><td>${weekday}</td><td>${fmtDate(date)}</td><td>${escapeHtml(label)}</td><td>—</td><td>—</td><td>${ist}</td><td>${soll}</td><td>${diff}</td><td></td></tr>`;
+   }
+   booked++;
    const c=dayCalc(d),ivs=intervalsOf(d),comes=ivs.map(x=>x.come).filter(Boolean).join(' / ')||'—',goes=ivs.map(x=>x.go).filter(Boolean).join(' / ')||'—';
+   let label=dayLabel(d.code);
+   if(holiday && d.code!=='F')label+=` · Feiertag (${holiday.name})`;
+   else if(weekend && !holiday)label+=` · Wochenende`;
    if(c.diff===null)incomplete++;else{total+=c.diff;complete++;}
-   return `<tr><td>${fmtDate(d.date)}</td><td>${escapeHtml(dayLabel(d.code))}</td><td>${escapeHtml(comes)}</td><td>${escapeHtml(goes)}</td><td>${c.ist===null?'offen':minsText(c.ist)+' h'}</td><td>${minsText(c.soll)} h</td><td>${c.diff===null?'—':minsText(c.diff)+' h'}</td><td>${escapeHtml(d.note||'')}</td></tr>`;
+   return `<tr><td>${weekday}</td><td>${fmtDate(date)}</td><td>${escapeHtml(label)}</td><td>${escapeHtml(comes)}</td><td>${escapeHtml(goes)}</td><td>${c.ist===null?'offen':minsText(c.ist)+' h'}</td><td>${minsText(c.soll)} h</td><td>${c.diff===null?'—':minsText(c.diff)+' h'}</td><td>${escapeHtml(d.note||'')}</td></tr>`;
   }).join('');
-  return `<section class="print-month"><h2>Arbeitszeitübersicht – ${monthNames[m-1]} ${y}</h2><table><thead><tr><th>Datum</th><th>Art</th><th>Kommen</th><th>Gehen</th><th>IST</th><th>SOLL</th><th>Differenz</th><th>Bemerkung</th></tr></thead><tbody>${body}</tbody><tfoot><tr><th colspan="6">Monatsdifferenz${incomplete?` (ohne ${incomplete} unvollständige Buchung${incomplete===1?'':'en'})`:''}</th><th>${minsText(total)} h</th><th></th></tr></tfoot></table><p class="print-footnote">Ausgewertete Buchungstage: ${items.length} · Vollständig berechnet: ${complete}</p></section>`;
+  return `<section class="print-month"><h2>Arbeitszeitübersicht – ${monthNames[m-1]} ${y}</h2><table><thead><tr><th>Wochentag</th><th>Datum</th><th>Art / Status</th><th>Kommen</th><th>Gehen</th><th>IST</th><th>SOLL</th><th>Differenz</th><th>Bemerkung</th></tr></thead><tbody>${body}</tbody><tfoot><tr><th colspan="7">Monatsdifferenz${incomplete?` (ohne ${incomplete} unvollständige Buchung${incomplete===1?'':'en'})`:''}</th><th>${minsText(total)} h</th><th></th></tr></tfoot></table><p class="print-footnote">Kalendertage: ${lastDay} · Erfasste Tage: ${booked} · Vollständig berechnet: ${complete} · Nicht erfasste Werktage bleiben bei der Monatsdifferenz unberücksichtigt.</p></section>`;
  }).join('');
 }
 $('printBtn').onclick=()=>{setTab('auswertung');buildMonthlyPrintReport();window.print();};

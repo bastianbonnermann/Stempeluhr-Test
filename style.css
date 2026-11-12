@@ -24,3 +24,19 @@
 .diff-breakdown div strong{font-size:16px;color:#123b70}
 .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#167346;color:white;padding:12px 20px;border-radius:10px;box-shadow:0 5px 20px #0003;font-weight:bold;z-index:1000;transition:opacity .2s,transform .2s}
 .toast.show{opacity:1;transform:translate(-50%,0)}.toast.error{background:#b83232}
+
+/* Version 4.5: vollständige Kalendermonate im PDF */
+@page{size:A4 landscape;margin:8mm}
+@media print{
+ #printReport .print-month{padding:2mm 0;break-after:page;page-break-after:always}
+ #printReport h2{font-size:15pt;margin:0 0 4mm}
+ #printReport table{font-size:7pt;table-layout:fixed}
+ #printReport th,#printReport td{padding:3px 4px;line-height:1.15;overflow-wrap:anywhere}
+ #printReport th:nth-child(1){width:11%}
+ #printReport th:nth-child(2){width:8%}
+ #printReport th:nth-child(3){width:20%}
+ #printReport th:nth-child(4),#printReport th:nth-child(5){width:9%}
+ #printReport th:nth-child(6),#printReport th:nth-child(7),#printReport th:nth-child(8){width:8%}
+ #printReport th:nth-child(9){width:19%}
+ #printReport .print-footnote{font-size:7pt;margin-top:4px}
+}

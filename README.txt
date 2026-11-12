@@ -1,4 +1,4 @@
-STEMPELUHR 4.3 – TESTVERSION
+STEMPELUHR 4.5 – TESTVERSION
 
 Änderungen in Version 4.3:
 - Übersicht kompakter gestaltet; Info-Karten unter der Zeiterfassung.
@@ -17,3 +17,11 @@ Die Buchungen bleiben im lokalen Browser-Speicher (localStorage). Ein App-Update
 
 WICHTIG:
 Dies ist weiterhin eine Testversion. Vor dem alleinigen produktiven Einsatz die Funktionen und Datensicherung gründlich prüfen.
+
+
+Änderungen in Version 4.5:
+- PDF-Auswertung zeigt für jeden Monat mit erfassten Buchungen sämtliche Kalendertage.
+- Wochentag und Datum werden für jeden Tag einzeln aufgeführt.
+- Automatische Feiertage in Rheinland-Pfalz und Wochenendtage werden auch ohne manuelle Buchung angezeigt.
+- Erfasste Arbeits-, Dienstreise-, Urlaubs-, Betriebsurlaubs- und sonstige Tagesbuchungen zeigen ihre eingetragenen Zeiten und Berechnungen.
+- Monatsdifferenz bleibt am Ende jeder Monatsseite; nicht erfasste Werktage werden nicht in die Differenz eingerechnet.
