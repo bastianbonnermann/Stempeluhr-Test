@@ -11,3 +11,16 @@
 /* Übersicht kompakt: direkte Zeiterfassung ohne Scrollen */
 .overview-stats{margin:14px 0 0;gap:8px}.overview-stats .stat{padding:10px 12px;gap:3px}.overview-stats .stat strong{font-size:20px}.overview-stats .stat span{font-size:12px}.overview-stats .stat small{font-size:11px}.day-code-label{display:block;margin:14px 0 0;max-width:420px}.adjust{display:grid;justify-content:center;gap:7px}.adjust-row{display:flex;justify-content:center;gap:8px}.adjust-row button{min-width:105px}
 @media(max-width:650px){.overview-stats{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.overview-stats .stat{padding:8px 6px}.overview-stats .stat strong{font-size:16px}.overview-stats .stat span{font-size:10px}.overview-stats .stat small{font-size:9px}.day-code-label{max-width:none}}
+
+/* Version 4.3: kompakte Kennzahlen am Ende der jeweiligen Bereiche */
+.leave-summary,.ledger-summary{margin:18px 0 0;gap:8px}
+.leave-summary .stat,.ledger-summary .stat{padding:10px 12px;gap:4px}
+.leave-summary .stat strong,.ledger-summary .stat strong{font-size:20px}
+.leave-summary .stat span,.ledger-summary .stat span{font-size:12px}
+.leave-summary .stat small,.ledger-summary .stat small{font-size:11px}
+.diff-breakdown{display:grid;gap:5px;margin-top:2px}
+.diff-breakdown div{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.diff-breakdown div small{font-size:12px;color:#65758a}
+.diff-breakdown div strong{font-size:16px;color:#123b70}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#167346;color:white;padding:12px 20px;border-radius:10px;box-shadow:0 5px 20px #0003;font-weight:bold;z-index:1000;transition:opacity .2s,transform .2s}
+.toast.show{opacity:1;transform:translate(-50%,0)}.toast.error{background:#b83232}

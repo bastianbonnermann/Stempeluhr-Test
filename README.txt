@@ -1,6 +1,6 @@
-STEMPELUHR 4.2 – TESTVERSION
+STEMPELUHR 4.3 – TESTVERSION
 
-Änderungen in Version 4.2:
+Änderungen in Version 4.3:
 - Übersicht kompakter gestaltet; Info-Karten unter der Zeiterfassung.
 - Resturlaub zeigt automatisch das aktuelle Kalenderjahr.
 - Letzte Buchungen aus der Übersicht entfernt; vollständige Liste unter „Auswertung & Daten“.
