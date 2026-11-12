@@ -85,9 +85,9 @@ function buildMonthlyPrintReport(){
    const date=`${y}-${pad(m)}-${pad(i+1)}`,dt=new Date(`${date}T12:00:00`),weekday=weekdays[dt.getDay()];
    const d=byDate.get(date),holiday=holidayList(y).find(h=>h.date===date),weekend=isWeekend(date);
    if(!d){
-    let label='Nicht erfasst',ist='—',soll='8:00 h',diff='—',note='';
+    let label='–',ist='—',soll='8:00 h',diff='—',note='';
     if(holiday){label=`Feiertag · ${holiday.name}`;ist='8:00 h';soll='8:00 h';diff='0:00 h';}
-    else if(weekend){label='Wochenendtag';ist='0:00 h';soll='0:00 h';diff='0:00 h';}
+    else if(weekend){label='Wochenende';ist='0:00 h';soll='0:00 h';diff='0:00 h';}
     return `<tr><td>${fmtDate(date)} - ${weekday}</td><td>${escapeHtml(label)}</td><td>—</td><td>—</td><td>${ist}</td><td>${soll}</td><td>${diff}</td><td></td></tr>`;
    }
    booked++;
@@ -98,7 +98,7 @@ function buildMonthlyPrintReport(){
    if(c.diff===null)incomplete++;else{total+=c.diff;complete++;}
    return `<tr><td>${fmtDate(date)} - ${weekday}</td><td>${escapeHtml(label)}</td><td>${escapeHtml(comes)}</td><td>${escapeHtml(goes)}</td><td>${c.ist===null?'offen':minsText(c.ist)+' h'}</td><td>${minsText(c.soll)} h</td><td>${c.diff===null?'—':minsText(c.diff)+' h'}</td><td>${escapeHtml(d.note||'')}</td></tr>`;
   }).join('');
-  return `<section class="print-month"><h2>Arbeitszeitübersicht – ${monthNames[m-1]} ${y}</h2><table><thead><tr><th>Datum</th><th>Art / Status</th><th>Kommen</th><th>Gehen</th><th>IST</th><th>SOLL</th><th>Differenz</th><th>Bemerkung</th></tr></thead><tbody>${body}</tbody><tfoot><tr><th colspan="6">Monatsdifferenz${incomplete?` (ohne ${incomplete} unvollständige Buchung${incomplete===1?'':'en'})`:''}</th><th>${minsText(total)} h</th><th></th></tr></tfoot></table><p class="print-footnote">Kalendertage: ${lastDay} · Erfasste Tage: ${booked} · Vollständig berechnet: ${complete} · Nicht erfasste Werktage bleiben bei der Monatsdifferenz unberücksichtigt.</p></section>`;
+  return `<section class="print-month"><h2>Arbeitszeitübersicht – ${monthNames[m-1]} ${y}</h2><table><thead><tr><th>Datum</th><th>Art / Status</th><th>Kommen</th><th>Gehen</th><th>IST</th><th>SOLL</th><th>Differenz</th><th>Bemerkung</th></tr></thead><tbody>${body}</tbody><tfoot><tr><th colspan="6">Monatsdifferenz${incomplete?` (ohne ${incomplete} unvollständige Buchung${incomplete===1?'':'en'})`:''}</th><th>${minsText(total)} h</th><th></th></tr></tfoot></table><p class="print-footnote">Kalendertage: ${lastDay} · Erfasste Tage: ${booked} · Vollständig berechnet: ${complete} · Nicht erfasste Werktage (–) bleiben bei der Monatsdifferenz unberücksichtigt.</p></section>`;
  }).join('');
 }
 $('printBtn').onclick=()=>{setTab('auswertung');buildMonthlyPrintReport();window.print();};

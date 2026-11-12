@@ -40,3 +40,19 @@
  #printReport th:nth-child(9){width:19%}
  #printReport .print-footnote{font-size:7pt;margin-top:4px}
 }
+
+/* Version 4.7: kompakter Monatsbericht auf DIN A4 Hochformat */
+@page{size:A4 portrait;margin:8mm}
+@media print{
+ #printReport .print-month{padding:1mm 0;break-after:page;page-break-after:always}
+ #printReport h2{font-size:13pt;margin:0 0 3mm}
+ #printReport table{width:100%;min-width:0;table-layout:fixed;font-size:7pt}
+ #printReport th,#printReport td{padding:2.5px 3px;line-height:1.12;overflow-wrap:anywhere}
+ #printReport th:nth-child(1){width:20%}
+ #printReport th:nth-child(2){width:18%}
+ #printReport th:nth-child(3),#printReport th:nth-child(4){width:8%}
+ #printReport th:nth-child(5),#printReport th:nth-child(6){width:8%}
+ #printReport th:nth-child(7){width:10%}
+ #printReport th:nth-child(8){width:20%}
+ #printReport .print-footnote{font-size:6.5pt;margin-top:3px}
+}

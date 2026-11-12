@@ -1,4 +1,4 @@
-STEMPELUHR 4.5 – TESTVERSION
+STEMPELUHR 4.7 – TESTVERSION
 
 Änderungen in Version 4.3:
 - Übersicht kompakter gestaltet; Info-Karten unter der Zeiterfassung.
@@ -25,3 +25,8 @@ Dies ist weiterhin eine Testversion. Vor dem alleinigen produktiven Einsatz die 
 - Automatische Feiertage in Rheinland-Pfalz und Wochenendtage werden auch ohne manuelle Buchung angezeigt.
 - Erfasste Arbeits-, Dienstreise-, Urlaubs-, Betriebsurlaubs- und sonstige Tagesbuchungen zeigen ihre eingetragenen Zeiten und Berechnungen.
 - Monatsdifferenz bleibt am Ende jeder Monatsseite; nicht erfasste Werktage werden nicht in die Differenz eingerechnet.
+
+Änderungen in Version 4.7:
+- PDF-Monatsübersicht auf DIN A4 Hochformat mit angepassten Spaltenbreiten.
+- Nicht erfasste Tage werden mit „–“ gekennzeichnet.
+- Wochenendtage werden als „Wochenende“ bezeichnet.
