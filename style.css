@@ -7,3 +7,7 @@
 .editor-card{background:#f5f8fc;border:1px solid #d8e2ee;border-radius:10px;padding:16px;margin:0 0 16px}.editor-card[hidden]{display:none}.editor-card .form-card{max-width:620px;padding:0;background:transparent}.editor-actions{display:flex;gap:8px;flex-wrap:wrap}.history-list{margin-top:16px;color:#53677f;font-size:13px;line-height:1.6}.history-entry{padding:8px 0;border-top:1px solid #dce5ef}.table-wrap button{padding:7px 10px;font-size:12px}
 
 .remove-adjustment{white-space:nowrap;color:#9b2c2c!important;border-color:#e4bcbc!important}
+
+/* Übersicht kompakt: direkte Zeiterfassung ohne Scrollen */
+.overview-stats{margin:14px 0 0;gap:8px}.overview-stats .stat{padding:10px 12px;gap:3px}.overview-stats .stat strong{font-size:20px}.overview-stats .stat span{font-size:12px}.overview-stats .stat small{font-size:11px}.day-code-label{display:block;margin:14px 0 0;max-width:420px}.adjust{display:grid;justify-content:center;gap:7px}.adjust-row{display:flex;justify-content:center;gap:8px}.adjust-row button{min-width:105px}
+@media(max-width:650px){.overview-stats{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.overview-stats .stat{padding:8px 6px}.overview-stats .stat strong{font-size:16px}.overview-stats .stat span{font-size:10px}.overview-stats .stat small{font-size:9px}.day-code-label{max-width:none}}
